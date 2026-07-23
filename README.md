@@ -11,7 +11,6 @@
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-%2306B6D4.svg?style=flat&logo=tailwindcss&logoColor=white)
 ![Amazon S3](https://img.shields.io/badge/Amazon%20S3-FF9900?style=flat&logo=amazons3&logoColor=white)
 ![Google Gemini](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=flat&logo=google&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-%230db7ed.svg?style=flat&logo=docker&logoColor=white)
 
 A full-stack, production-grade real-time chat application built with the MERN stack and Socket.IO. Features include one-on-one messaging, a personalised AI chatbot powered by Google Gemini, image sharing via AWS S3, email verification, email notifications, and a fully responsive dark/light UI built with React 19, TypeScript, Tailwind CSS v4, and shadcn/ui components.
 
@@ -30,7 +29,7 @@ A full-stack, production-grade real-time chat application built with the MERN st
 - [Socket.IO Events](#socketio-events)
 - [Environment Variables](#environment-variables)
 - [Getting Started](#getting-started)
-  - [Docker (recommended)](#docker-recommended)
+  - [Deployment (Vercel + Render)](#deployment-vercel--render)
   - [Manual (local development)](#manual-local-development)
 - [Scripts](#scripts)
 - [Security Design](#security-design)
@@ -119,7 +118,7 @@ A full-stack, production-grade real-time chat application built with the MERN st
 | **AI** | Google Gemini via `@google/genai` |
 | **File Storage** | AWS S3 (pre-signed POST uploads) |
 | **Email** | Nodemailer (Gmail SMTP) — OTP login, email verification, message notifications |
-| **Containerisation** | Docker, Docker Compose |
+| **Deployment** | Vercel (frontend), Render (backend) |
 
 ---
 
@@ -127,11 +126,9 @@ A full-stack, production-grade real-time chat application built with the MERN st
 
 ```
 conversa/
-├── docker-compose.yml                 # Orchestrates mongo + backend + frontend
 ├── .env.example                       # Template for all environment variables
 │
 ├── backend/
-│   ├── Dockerfile
 │   ├── index.js                       # Express app entry point, HTTP server, Socket.IO init
 │   ├── db.js                          # MongoDB connection
 │   ├── secrets.js                     # Environment variable exports
@@ -165,8 +162,6 @@ conversa/
 │       └── delete-test-users.js
 │
 └── frontend/
-    ├── Dockerfile
-    ├── nginx.conf                     # SPA fallback + asset caching config
     └── src/
         ├── App.tsx                    # Route definitions
         ├── pages/
@@ -371,11 +366,10 @@ The socket server requires a valid JWT passed in `handshake.auth.token`.
 
 ## Environment Variables
 
-A single `.env` file at the **project root** is used for both Docker Compose and local development. Copy `.env.example` to `.env` and fill in your values.
+A single `.env` file at the **project root** is used for local development. Copy `.env.example` to `.env` and fill in your values.
 
 ```env
 # ── Database ──────────────────────────────────────────────────────────────────
-# Overridden automatically by docker-compose to point at the mongo service.
 MONGO_URI=mongodb://localhost:27017/
 MONGO_DB_NAME=conversa
 
@@ -411,29 +405,23 @@ VITE_API_URL=http://localhost:5500
 
 ## Getting Started
 
-### Docker (recommended)
+### Deployment (Vercel + Render)
 
-Requires [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or Docker Engine + Compose plugin).
+Deploy the frontend on Vercel and the backend on Render.
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/your-username/conversa.git
-cd conversa
+#### Frontend (Vercel)
+1. Connect the frontend folder to Vercel.
+2. Set the build command to `npm run build`.
+3. Set the output directory to `dist`.
+4. Add the environment variable `VITE_API_URL` with your Render backend URL.
 
-# 2. Create your .env from the template
-cp .env.example .env
-# Edit .env — set JWT_SECRET, GEMINI_API_KEY, EMAIL, PASSWORD, AWS_*, etc.
+#### Backend (Render)
+1. Connect the backend folder to Render.
+2. Set the start command to `npm start`.
+3. Add the required environment variables from `.env.example`.
+4. Make sure your MongoDB connection string, JWT secret, Gemini key, email credentials, and AWS S3 credentials are configured in Render.
 
-# 3. Build and start all three services (mongo + backend + frontend)
-docker compose up --build -d
-
-# Frontend  →  http://localhost
-# Backend   →  http://localhost:5500
-# MongoDB   →  localhost:27019 (mapped away from the default 27017)
-```
-
-> **`VITE_API_URL`** must be the URL where the backend is reachable **from the user's browser**.  
-> For local Docker this is `http://localhost:5500`. For production, use your public API domain.
+> **`VITE_API_URL`** must be the URL where the backend is reachable **from the user's browser**.
 
 ### Manual (local development)
 
@@ -488,7 +476,6 @@ npm run dev            # Vite dev server — listens on :5173
 - **Conversation membership** — every `join-chat` and `send-message` handler verifies the authenticated user is a member of the target conversation
 - **Email verification gate** — the `DashboardLayout` component redirects unverified users to `/verify-email` before they can access any chat functionality; bot accounts are pre-verified at creation
 - **S3 pre-signed uploads** — the client never receives AWS credentials; uploads go directly to S3 through a short-lived pre-signed POST URL generated server-side
-- **Non-root Docker user** — the backend container runs as an unprivileged `appuser`
 - **Account anonymisation** — deleted accounts have credentials wiped and PII replaced with generic values; the document is retained (flagged `isDeleted: true`) to preserve conversation context for other participants
 
 ---
