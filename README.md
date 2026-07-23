@@ -1,4 +1,4 @@
-# Conversa — MERN Real-Time Chat Application
+# OMNI Chat — MERN Real-Time Chat Application
 
 <div align="center">
 
@@ -518,7 +518,7 @@ MIT — see the [LICENSE](LICENSE) file for details.
 
 ## About the Author
 
-Built by **Pankil Soni**
+Built by **Kavish Arora**
 
 - Email: pmsoni2016@gmail.com
 - LinkedIn: [pankil-soni-5a0541170](https://www.linkedin.com/in/pankil-soni-5a0541170/)

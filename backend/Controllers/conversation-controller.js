@@ -1,6 +1,5 @@
 const Conversation = require("../Models/Conversation.js");
 const User = require("../Models/User.js");
-
 /**
  * Sanitizes a populated member document when viewed by someone whom that
  * member has blocked. Profile fields become generic placeholders; only the
@@ -19,9 +18,9 @@ function sanitizeForRequester(member, requesterId) {
   return {
     _id: obj._id,
     email: obj.email, // email is intentionally NOT sanitized
-    name: "Conversa User",
+    name: "OMNI Chat User",
     about: "",
-    profilePic: "https://ui-avatars.com/api/?name=Conversa+User&background=6366f1&color=fff&bold=true",
+    profilePic: "https://ui-avatars.com/api/?name=OMNI+Chat+User&background=6366f1&color=fff&bold=true",
     isOnline: false,
     lastSeen: null,
     isBot: obj.isBot,

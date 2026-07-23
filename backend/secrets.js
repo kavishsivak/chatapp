@@ -10,6 +10,7 @@ const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3-flash-preview";
 const EMAIL = process.env.EMAIL;
 const PASSWORD = process.env.PASSWORD;
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
+const AWS_REGION = process.env.AWS_REGION || "eu-north-1";
 const AWS_ACCESS_KEY = process.env.AWS_ACCESS_KEY;
 const AWS_SECRET = process.env.AWS_SECRET;
 const FRONTEND_URL = process.env.FRONTEND_URL || "https://conversa-chatting.netlify.app";
@@ -21,6 +22,7 @@ module.exports = {
   JWT_SECRET,
   AWS_ACCESS_KEY,
   AWS_SECRET,
+  AWS_REGION,
   GEMINI_API_KEY,
   GEMINI_MODEL,
   EMAIL,

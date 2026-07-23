@@ -1,8 +1,10 @@
 {
-  "name": "frontend",
+  "name": "omni-chat-frontend",
   "private": true,
   "version": "0.0.1",
+  "description": "Frontend client for OMNI Chat built with React, TypeScript, Vite, and Tailwind CSS.",
   "type": "module",
+  "author": "Kavish Arora",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
